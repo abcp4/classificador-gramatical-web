@@ -2,7 +2,7 @@ import streamlit as st
 from annotated_text import annotated_text
 import requests
 import os
-import pandas as pd
+from utils import my_table, create_tbody
 
 # ===========================================#
 #                 SideBar                   #
@@ -40,15 +40,6 @@ def get_tip():
 
 
 desc = "Classificador gramatical para fins didáticos!"
-# CSS to inject contained in a string
-hide_table_row_index = """
-<style>
-    tbody th {display:none}
-    .blank {display:none}
-</style>
-"""
-# Inject CSS with Markdown
-st.markdown(hide_table_row_index, unsafe_allow_html=True)
 
 
 def main():
@@ -65,10 +56,10 @@ def main():
 
         st.markdown("# Análise morfológica")
         if st.button("Analisar"):
-           for index, morph in enumerate(frase_morph):
-               st.markdown(f"### {tokens[index]}")
-               df = pd.DataFrame(morph, columns=["Categoria", "Tipo"])
-               st.table(df)
+            st.markdown(
+                my_table.format(body=create_tbody(tokens, frase_morph)),
+                unsafe_allow_html=True,
+            )
 
 
 if __name__ == "__main__":
